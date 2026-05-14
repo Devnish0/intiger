@@ -4,7 +4,7 @@ import {
   signUpController,
   verifyController,
   logOutController,
-} from "../controllers/auth.controller.js";
+} from "../controllers/auth.controller.ts";
 
 const router = Router();
 
