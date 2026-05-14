@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   userProfile,
   editUserProfile,
-} from "../controllers/user.controller.ts";
+} from "../controllers/user.controller.js";
 const router = Router();
 
 router.route("/profile").get(userProfile);

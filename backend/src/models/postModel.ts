@@ -1,6 +1,7 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import type { IPost } from "../types.js";
 
-const postSchema = new mongoose.Schema(
+const postSchema = new Schema<IPost>(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
     data: { type: String, required: true, trim: true },
@@ -16,4 +17,4 @@ const postSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("post", postSchema);
+export default mongoose.model<IPost>("post", postSchema);

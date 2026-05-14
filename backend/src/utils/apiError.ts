@@ -1,6 +1,16 @@
 // to get structured errors we need api error handlers
 class ApiError extends Error {
-  constructor(statusCode, message, errors = [], stack = "") {
+  statusCode: number;
+  data: null;
+  success: boolean;
+  errors: string[];
+
+  constructor(
+    statusCode: number,
+    message: string,
+    errors: string[] = [],
+    stack: string = ""
+  ) {
     // which is originally the Error constructor
     super(message);
     this.statusCode = statusCode;

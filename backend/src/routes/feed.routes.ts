@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { feedController } from "../controllers/feed.controller.ts";
+import { feedController } from "../controllers/feed.controller.js";
 const router = Router();
 
 router.route("/index").get(feedController);

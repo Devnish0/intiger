@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
-import { DB_NAME } from "../../constants.js";
+import { DB_NAME } from "../constants.js";
 
 const DBURL =
   process.env.NODE_ENV === "production"
-    ? process.env.DBURL
+    ? process.env.DBURL!
     : `mongodb://127.0.0.1:27017/${DB_NAME}`;
 
-const connectDB = async () => {
+const connectDB = async (): Promise<void> => {
   try {
     const connectionInstance = await mongoose.connect(DBURL);
     console.log(

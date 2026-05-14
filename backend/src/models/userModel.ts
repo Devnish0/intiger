@@ -1,7 +1,14 @@
-import mongoose from "mongoose";
+import mongoose, { type Model, Schema } from "mongoose";
 import bcrypt from "bcrypt";
+import type { IUser } from "../types.js";
 
-const userSchema = new mongoose.Schema(
+interface IUserMethods {
+  isPasswordCorrect(password: string): Promise<boolean>;
+}
+
+type UserModel = Model<IUser, {}, IUserMethods>;
+
+const userSchema = new Schema<IUser, UserModel, IUserMethods>(
   {
     name: {
       type: String,
@@ -56,8 +63,10 @@ userSchema.pre("save", async function () {
 
 // making my own middleware to check the isPasswordCorrect
 
-userSchema.methods.isPasswordCorrect = async function (password) {
+userSchema.methods.isPasswordCorrect = async function (
+  password: string
+): Promise<boolean> {
   return await bcrypt.compare(password, this.password);
 };
 
-export default mongoose.model("user", userSchema);
+export default mongoose.model<IUser, UserModel>("user", userSchema);

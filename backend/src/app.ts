@@ -8,14 +8,18 @@ import feedRouter from "./routes/feed.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import userRouter from "./routes/user.routes.js";
 import protectedroute from "./middlewares/authMiddleware.js";
+import "./types.js"; // Import type augmentations
 
 const app = express();
 const allowedOrigins =
   process.env.NODE_ENV === "production"
     ? ["https://intiger.nishank.dev"]
     : ["http://localhost:5173"];
-const corsOptions = {
-  origin: function (requestOrigin, callback) {
+const corsOptions: cors.CorsOptions = {
+  origin: function (
+    requestOrigin: string | undefined,
+    callback: (err: Error | null, allow?: boolean) => void
+  ) {
     if (!requestOrigin || allowedOrigins.includes(requestOrigin)) {
       callback(null, true);
     } else {

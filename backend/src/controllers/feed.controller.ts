@@ -1,8 +1,9 @@
+import type { Request, Response } from "express";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import postModel from "../models/postModel.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 
-const feedController = asyncHandler(async (req, res) => {
+const feedController = asyncHandler(async (req: Request, res: Response) => {
   const posts = await postModel
     .find()
     .populate("user", "username name isAdmin")

@@ -1,7 +1,14 @@
-import mongoose from "mongoose";
+import mongoose, { type Model, Schema } from "mongoose";
 import bcrypt from "bcrypt";
+import type { IOtp } from "../types.js";
 
-const otpSchema = new mongoose.Schema({
+interface IOtpMethods {
+  isOtpCorrect(otp: string): Promise<boolean>;
+}
+
+type OtpModel = Model<IOtp, {}, IOtpMethods>;
+
+const otpSchema = new Schema<IOtp, OtpModel, IOtpMethods>({
   email: String,
   otpHash: String,
   otpExpires: Number,
@@ -29,8 +36,10 @@ otpSchema.pre("save", async function () {
 });
 
 // Compare plain OTP with hashed OTP
-otpSchema.methods.isOtpCorrect = async function (otp) {
+otpSchema.methods.isOtpCorrect = async function (
+  otp: string
+): Promise<boolean> {
   return await bcrypt.compare(otp, this.otpHash);
 };
 
-export const otpModel = mongoose.model("OTP", otpSchema);
+export const otpModel = mongoose.model<IOtp, OtpModel>("OTP", otpSchema);

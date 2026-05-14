@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
+import type { Request, Response } from "express";
 import userModel from "../models/userModel.js";
 import { sendOtpEmail } from "../services/otpSend.js";
 import { ApiError } from "../utils/apiError.js";
@@ -9,7 +10,7 @@ import { generateOTP } from "../utils/otpGenerator.js";
 import { otpModel } from "../models/otpModel.js";
 import jwt from "jsonwebtoken";
 
-const loginController = async (req, res) => {
+const loginController = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
   const user = await userModel.findOne({ email });
   if (!user) throw new ApiError(401, "invalid credentials");
@@ -18,7 +19,7 @@ const loginController = async (req, res) => {
   if (!iscorrect) throw new ApiError(401, "invalid credentials");
   const token = jwt.sign(
     { exp: Math.floor(Date.now() / 1000) + 60 * 60 * 60, data: email },
-    process.env.JWT_SECRET
+    process.env.JWT_SECRET as string
   );
 
   res
@@ -32,7 +33,7 @@ const loginController = async (req, res) => {
     .json(new ApiResponse(201, "cookies set succesfully"));
 };
 
-const signUpController = asyncHandler(async (req, res) => {
+const signUpController = asyncHandler(async (req: Request, res: Response) => {
   const { name, username, email, password, bio, location } = req.body;
 
   // checking for empty field
@@ -61,13 +62,12 @@ const signUpController = asyncHandler(async (req, res) => {
       password,
       bio,
       location,
-      pfp: null,
     },
   });
   res.status(201).json(new ApiResponse(201, true, "Otp sent to email"));
 });
 
-const verifyController = asyncHandler(async (req, res) => {
+const verifyController = asyncHandler(async (req: Request, res: Response) => {
   const { otp } = req.body;
 
   const record = await otpModel.findOne({}).sort({ _id: -1 }).limit(1);
@@ -100,7 +100,7 @@ const verifyController = asyncHandler(async (req, res) => {
   // assigning a jwt token
   const token = jwt.sign(
     { exp: Math.floor(Date.now() / 1000) + 60 * 60, data: email },
-    process.env.JWT_SECRET
+    process.env.JWT_SECRET as string
   );
   // setting the token in cookie
   res
@@ -114,7 +114,7 @@ const verifyController = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, true, "User created successfully"));
 });
 
-const logOutController = asyncHandler(async (req, res) => {
+const logOutController = asyncHandler(async (req: Request, res: Response) => {
   res.clearCookie("token", {
     httpOnly: true,
     secure: true,

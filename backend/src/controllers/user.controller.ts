@@ -1,10 +1,11 @@
+import type { Request, Response } from "express";
 import userModel from "../models/userModel.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 
-const userProfile = asyncHandler(async (req, res) => {
+const userProfile = asyncHandler(async (req: Request, res: Response) => {
   // Populate posts when fetching user profile
-  const user = await userModel.findById(req.user._id).populate({
+  const user = await userModel.findById(req.user!._id).populate({
     path: "posts",
     options: { sort: { createdAt: -1 } },
     populate: { path: "user", select: "name username isAdmin" },
@@ -15,21 +16,17 @@ const userProfile = asyncHandler(async (req, res) => {
     username,
     email,
     createdAt,
-    followers,
-    following,
     posts,
     isAdmin,
     bio,
     location,
-  } = user;
-  const userProfile = {
+  } = user!;
+  const profile = {
     id: _id,
     name,
     username,
     email,
     createdAt,
-    followers,
-    following,
     posts,
     isAdmin,
     bio,
@@ -40,14 +37,14 @@ const userProfile = asyncHandler(async (req, res) => {
     .json(
       new ApiResponse(
         201,
-        { user: userProfile },
+        { user: profile },
         "profile Fetched Successfully"
       )
     );
 });
-const editUserProfile = asyncHandler(async (req, res) => {
+const editUserProfile = asyncHandler(async (req: Request, res: Response) => {
   const { name, username, bio, location } = req.body;
-  const id = req.user._id;
+  const id = req.user!._id;
   const editedUser = await userModel
     .findByIdAndUpdate(
       id,

@@ -3,7 +3,7 @@ import {
   createPost,
   specificPost,
   deletePost,
-} from "../controllers/post.controller.ts";
+} from "../controllers/post.controller.js";
 
 const router = Router();
 
