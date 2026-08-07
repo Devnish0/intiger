@@ -13,7 +13,7 @@ import "./types.js"; // Import type augmentations
 const app = express();
 const allowedOrigins =
   process.env.NODE_ENV === "production"
-    ? ["https://intiger.nishank.dev"]
+    ? ["https://intiger.vercel.app"]
     : ["http://localhost:5173"];
 const corsOptions: cors.CorsOptions = {
   origin: function (
